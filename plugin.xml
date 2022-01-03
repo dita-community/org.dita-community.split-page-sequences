@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<plugin id="org.dita-community.pdf.split-page-sequences">
+  <feature extension="dita.conductor.target.relative" file="build.xml"/>
+
+  <template file="build_org.dita-community.pdf.split-page-sequences_template.xml"/>
+
+</plugin>
