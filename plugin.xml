@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="https://www.dita-ot.org/rng/plugin.rnc" type="application/relax-ng-compact-syntax"?>
 <plugin id="org.dita-community.pdf.split-page-sequences">
-  <feature extension="dita.conductor.target.relative" file="build.xml"/>
 
-  <template file="build_org.dita-community.pdf.split-page-sequences_template.xml"/>
+  <require plugin="org.dita.pdf2"/>
+  
+  <feature extension="dita.xsl.xslfo" value="cfg/fo/xsl/split-page-sequences"/>
 
 </plugin>
