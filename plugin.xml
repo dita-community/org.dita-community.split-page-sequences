@@ -4,6 +4,11 @@
 
   <require plugin="org.dita.pdf2"/>
   
-  <feature extension="dita.xsl.xslfo" value="cfg/fo/xsl/split-page-sequences"/>
+  <feature extension="package.support.name" value="Eliot Kimber"/>
+  <feature extension="package.support.email" value="drmacro@gmail.com"/>
+  <feature extension="package.version" value="0.1"/>
+  
+  <feature extension="dita.xsl.xslfo" file="cfg/fo/xsl/root-processing.xsl"/>
+  <feature extension="dita.xsl.xslfo" file="cfg/fo/xsl/split-page-sequences.xsl"/>
 
 </plugin>

@@ -12,13 +12,29 @@
   <!-- ==============================================================
        Mode to split a single page sequence into multiple page
        sequences based on the presence of 
-       dita-ot:page-sequence-start/dita-ot:page-sequence-end 
+       dita-ot:page-sequence-start/dita-ot:page-sequence-end pairs 
        markers anywhere within the flow.
        
        See https://markmail.org/message/kmq2g4fidmw6cofz
        ============================================================== -->
+
+  <xsl:mode name="sps:split-page-sequences"
+    on-no-match="shallow-copy"
+  />
+
+  <xsl:template mode="sps:split-page-sequences" match="*" priority="-1">
+    <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
+    
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
   
-  <xsl:template mode="sps:split-page-sequences" match="fo:page-sequence">
+  <xsl:template mode="sps:split-page-sequences" match="@* | processing-instruction() | comment() | text()">
+    <xsl:copy-of select="."/>
+  </xsl:template>
+  
+  <xsl:template mode="sps:split-page-sequences" match="fo:page-sequence[dita-ot:page-sequence-start]">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
     
     <xsl:if test="$doDebug">
