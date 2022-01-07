@@ -20,13 +20,24 @@
   <xsl:import href="topic.xsl"/>
   
   <xsl:template match="/" name="rootTemplate">
+    
+    <xsl:variable name="doDebug" as="xs:boolean" select="false()"/>
+    
     <xsl:variable name="base-fo" as="node()*">
       <xsl:next-match/>
     </xsl:variable>
-    
+    <xsl:if test="$doDebug">
+      <xsl:message>+ [DEBUG] SPS: Applying templates to base FO in mode sps:split-page-sequences...</xsl:message>
+    </xsl:if>
+    <xsl:result-document href="base-fo.fo">
+      <xsl:sequence select="$base-fo"/>
+    </xsl:result-document>
     <xsl:apply-templates select="$base-fo" mode="sps:split-page-sequences">
-      <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
+      <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
     </xsl:apply-templates>
+    <xsl:if test="$doDebug">
+      <xsl:message>+ [DEBUG] SPS: Done applying templates to base FO in mode sps:split-page-sequences.</xsl:message>
+    </xsl:if>
   </xsl:template>
   
 </xsl:stylesheet>

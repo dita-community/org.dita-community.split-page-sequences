@@ -23,7 +23,7 @@
   <xsl:template match="*[contains(@class, ' topic/topic ')]">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
     
-    <xsl:variable name="doDebug" as="xs:boolean" select="$doDebug or true()"/>
+    <xsl:variable name="doDebug" as="xs:boolean" select="$doDebug"/>
     
     <xsl:variable name="page-sequence-data" as="map(*)?"
          select="sps:getPageSequenceData(.)"

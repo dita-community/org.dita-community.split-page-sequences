@@ -25,6 +25,10 @@
   <xsl:template mode="sps:split-page-sequences" match="*" priority="-1">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
     
+    <xsl:if test="$doDebug and false()">
+      <xsl:message expand-text="yes">+ [DEBUG] sps:split-page-sequences: Fallbackk: Handling element {name(..)}/{name(.)}</xsl:message>
+    </xsl:if>
+    
     <xsl:copy>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
@@ -34,7 +38,7 @@
     <xsl:copy-of select="."/>
   </xsl:template>
   
-  <xsl:template mode="sps:split-page-sequences" match="fo:page-sequence[sps:page-sequence-start]">
+  <xsl:template mode="sps:split-page-sequences" match="fo:page-sequence[.//sps:page-sequence-start]">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
     
     <xsl:if test="$doDebug">
@@ -105,7 +109,7 @@
       />
       <xsl:choose>
         <xsl:when test="exists($page-sequence-master)">
-          <fo:page-sequence master-reference="{$page-sequence-master}-pages">
+          <fo:page-sequence master-reference="{$page-sequence-master}">
             <xsl:apply-templates mode="sps:construct-static-content-for-page-sequence"
               select="$original-page-sequence">
               <xsl:with-param name="page-sequence-master" as="xs:string" tunnel="yes" select="$page-sequence-master"/>
@@ -208,6 +212,25 @@
   <xsl:template mode="sps:filter-bad-attributes" match="node()" priority="-1">
     <xsl:sequence select="."/>
   </xsl:template>
+  
+  <xsl:template mode="sps:filter-ids" match="@id" priority="10">
+    <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>    
+    
+    <xsl:variable name="first-with-id" as="element()"
+      select="key('id', xs:string(.), root(.))[1]"
+    />
+    <xsl:if test=".. is $first-with-id">
+      <xsl:sequence select="."/>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="node() | @*" mode="sps:filter-ids">
+    <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>    
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+  
   
   <!-- ===============================================================
        Mode sps:construct-static-content-for-page-sequence
