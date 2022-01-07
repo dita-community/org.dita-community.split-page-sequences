@@ -7,12 +7,12 @@
   xmlns:local="urn:local-functions" 
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   xmlns:sps="urn:ns:dita-community:split-page-sequences"
-  exclude-result-prefixes="xs xd opentopic local dita-ot" 
+  exclude-result-prefixes="xs xd opentopic local dita-ot sps" 
   version="3.0">
   <!-- ==============================================================
        Mode to split a single page sequence into multiple page
        sequences based on the presence of 
-       dita-ot:page-sequence-start/dita-ot:page-sequence-end pairs 
+       sps:page-sequence-start/sps:page-sequence-end pairs 
        markers anywhere within the flow.
        
        See https://markmail.org/message/kmq2g4fidmw6cofz
@@ -34,7 +34,7 @@
     <xsl:copy-of select="."/>
   </xsl:template>
   
-  <xsl:template mode="sps:split-page-sequences" match="fo:page-sequence[dita-ot:page-sequence-start]">
+  <xsl:template mode="sps:split-page-sequences" match="fo:page-sequence[sps:page-sequence-start]">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
     
     <xsl:if test="$doDebug">
@@ -51,16 +51,16 @@
         <xsl:for-each-group 
           select="descendant::fo:block[empty(.//fo:block | .//fo:table)] | 
           descendant::fo:table |
-          descendant::dita-ot:page-sequence-start |
-          descendant::dita-ot:page-sequence-end"
-          group-starting-with="dita-ot:page-sequence-start">
+          descendant::sps:page-sequence-start |
+          descendant::sps:page-sequence-end"
+          group-starting-with="sps:page-sequence-start">
           <xsl:if test="$doDebug">
             <xsl:message>+ [DEBUG] split-page-sequences: group [<xsl:value-of select="position()"/>] Context element is <xsl:value-of select="name(.)"/>]</xsl:message>
           </xsl:if>
           <xsl:variable name="group-number" as="xs:integer" select="position()"/>
           <xsl:variable name="page-sequence-master" as="xs:string"
             select="
-            if (self::dita-ot:page-sequence-start)
+            if (self::sps:page-sequence-start)
             then string(@page-sequence-master)
             else $original-page-sequence/@master-reference"/>
           <xsl:if test="$doDebug">
@@ -74,7 +74,7 @@
               tunnel="yes"/>
             <xsl:with-param name="page-sequence-start" as="xs:boolean"
               tunnel="yes"
-              select="exists(self::dita-ot:page-sequence-start)"
+              select="exists(self::sps:page-sequence-start)"
             />        
             <xsl:with-param name="page-sequence-master" as="xs:string" tunnel="yes" select="$page-sequence-master"/>
             <xsl:with-param name="group-number" as="xs:integer" tunnel="yes" select="$group-number"/>
@@ -178,8 +178,8 @@
   </xsl:template>  
   
   <xsl:template mode="sps:split-flow" 
-    match="dita-ot:page-sequence-start | 
-           dita-ot:page-sequence-end">
+    match="sps:page-sequence-start | 
+           sps:page-sequence-end">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
   </xsl:template>
   

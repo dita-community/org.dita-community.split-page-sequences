@@ -16,6 +16,9 @@
        of the initial FO to split the page sequences.
        ============================================================== -->
   
+  <xsl:import href="split-page-sequences.xsl"/>
+  <xsl:import href="topic.xsl"/>
+  
   <xsl:template match="/" name="rootTemplate">
     <xsl:variable name="base-fo" as="node()*">
       <xsl:next-match/>
