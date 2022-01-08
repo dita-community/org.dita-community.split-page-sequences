@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description 
+  xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:sps="urn:ns:dita-community:split-page-sequences"
+  stylesheet="./test-split-page-sequences.xsl"  
+  > 
+
+    
+  <x:scenario label="Test sps:getPageSequenceData">
+    <x:scenario label="Test Page Sequence No start/end">
+      <x:call function="sps:getPageSequenceData">
+        <x:param as="element()" name="context">
+          <topic outputclass="foo page-sequence_landscape-pages"/>
+        </x:param>
+      </x:call>
+      <x:expect as="map(*)?" label="Expected map with true/true/landscape-pages"
+        select="map{'start' : true(), 'end' : true(), 'layout' : 'landscape-pages'}"/>
+    </x:scenario>
+    <x:scenario label="Test Page Sequence start">
+      <x:call function="sps:getPageSequenceData">
+        <x:param as="element()" name="context">
+          <topic outputclass="foo page-sequence-start_landscape-pages"/>
+        </x:param>
+      </x:call>
+      <x:expect as="map(*)?" label="Expected map with start true, end false"
+        select="map{'start' : true(), 'end' : false(), 'layout' : 'landscape-pages'}"/>
+    </x:scenario>
+    <x:scenario label="Test Page Sequence end">
+      <x:call function="sps:getPageSequenceData">
+        <x:param as="element()" name="context">
+          <topic outputclass="foo page-sequence-end_landscape-pages"/>
+        </x:param>
+      </x:call>
+      <x:expect as="map(*)?" label="Expected map with start false, end true"
+        select="map{'start' : false(), 'end' : true(), 'layout' : 'landscape-pages'}"/>
+    </x:scenario>
+  </x:scenario>
+    
+  
+  <x:scenario label="Split page sequences no split to be done" pending="true">
+    
+  </x:scenario>
+  <x:scenario label="Split page sequences split on topics within a chapter" pending="true">
+  </x:scenario>
+</x:description>

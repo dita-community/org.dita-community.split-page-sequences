@@ -6,13 +6,16 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:local="urn:local-functions" 
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-  exclude-result-prefixes="xs xd opentopic local dita-ot" 
-  version="2.0">
+  exclude-result-prefixes="xs xd opentopic local dita-ot"
+  expand-text="true"
+  version="3.0">
   
-  <xsl:import href="commons.xsl"/>
-  <xsl:import href="construct-page-sequences.xsl"/>
-  <xsl:import href="split-spans.xsl"/>
-  <xsl:import href="split-page-sequences.xsl"/>
+  <!-- ==============================================================
+       Test driver to verify behavior of split page sequences
+       
+       ============================================================== -->
+  
+  <xsl:import href="../../cfg/fo/xsl/split-page-sequences.xsl"/>
   
   <xsl:key name="topic-id" match="*[contains(@class, ' topic/topic ')][@id]" use="@id"/>
   <xsl:output
