@@ -5,7 +5,6 @@
   stylesheet="./test-split-page-sequences.xsl"  
   > 
 
-    
   <x:scenario label="Test sps:getPageSequenceData">
     <x:scenario label="Test Page Sequence No start/end">
       <x:call function="sps:getPageSequenceData">
@@ -36,6 +35,32 @@
     </x:scenario>
   </x:scenario>
     
+  <x:scenario label="Test error checking">
+    <x:scenario label="Good input with markers">
+      <x:call function="sps:isMarkersPaired">
+        <x:param name="context" href="../resources/xsl-fo/input/base-fo-good-markers.fo" select="/*" as="element()"/>
+      </x:call>
+      <x:expect test="$x:result" label="Expected true value"/>
+    </x:scenario>
+    <x:scenario label="Good input without markers">
+      <x:call function="sps:isMarkersPaired">
+        <x:param name="context" href="../resources/xsl-fo/input/base-fo-no-markers.fo" select="/*" as="element()"/>
+      </x:call>
+      <x:expect test="$x:result" label="Expected true value"/>
+    </x:scenario>
+    <x:scenario label="Not paired">
+      <x:call function="sps:isMarkersPaired">
+        <x:param name="context" href="../resources/xsl-fo/input/base-fo-mismatched-markers.fo" select="/*" as="element()"/>
+      </x:call>
+      <x:expect test="not($x:result)" label="Expected false value"/>
+    </x:scenario>
+    <x:scenario label="Mismatched">
+      <x:call function="sps:findUnmatchedMarkers">
+        <x:param name="context" href="../resources/xsl-fo/input/base-fo-mismatched-markers.fo" select="/*" as="element()"/>
+      </x:call>
+      <x:expect test="count($x:result) eq 2" label="Expected two unmatched items"/>
+    </x:scenario>
+  </x:scenario>
   
   <x:scenario label="Split page sequences no split to be done" pending="true">
     

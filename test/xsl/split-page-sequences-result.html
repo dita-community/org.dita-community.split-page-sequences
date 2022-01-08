@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml">
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      <title>Test Report for /Users/ekimber/workspace/dometic/toolkit-plugins/org.dita-community.split-page-sequences/test/xsl/test-split-page-sequences.xsl (passed: 3 / pending: 0 / failed: 0 / total: 3)</title>
+      <title>Test Report for /Users/ekimber/workspace/dometic/toolkit-plugins/org.dita-community.split-page-sequences/test/xsl/test-split-page-sequences.xsl (passed: 7 / pending: 0 / failed: 0 / total: 7)</title>
       <style type="text/css">/****************************************************************************/
 /*  File:       test-report.css                                             */
 /*  Author:     Jeni Tennison                                               */
@@ -592,7 +592,7 @@ span.scenario-totals {
       <h1>Test Report</h1>
       <p>Stylesheet: <a href="file:/Users/ekimber/workspace/dometic/toolkit-plugins/org.dita-community.split-page-sequences/test/xsl/test-split-page-sequences.xsl">/Users/ekimber/workspace/dometic/toolkit-plugins/org.dita-community.split-page-sequences/test/xsl/test-split-page-sequences.xsl</a></p>
       <p>XSpec: <a href="file:/Users/ekimber/workspace/dometic/toolkit-plugins/org.dita-community.split-page-sequences/test/xsl/split-page-sequences.xspec">/Users/ekimber/workspace/dometic/toolkit-plugins/org.dita-community.split-page-sequences/test/xsl/split-page-sequences.xspec</a></p>
-      <p>Tested: 8 January 2022 at 11:40</p>
+      <p>Tested: 8 January 2022 at 13:54</p>
       <h2>Contents</h2>
       <table class="xspec">
          <colgroup>
@@ -605,10 +605,10 @@ span.scenario-totals {
          <thead>
             <tr>
                <th></th>
-               <th class="totals">passed: 3</th>
+               <th class="totals">passed: 7</th>
                <th class="totals">pending: 0</th>
                <th class="totals">failed: 0</th>
-               <th class="totals">total: 3</th>
+               <th class="totals">total: 7</th>
             </tr>
          </thead>
          <tbody>
@@ -618,6 +618,13 @@ span.scenario-totals {
                <th class="totals">0</th>
                <th class="totals">0</th>
                <th class="totals">3</th>
+            </tr>
+            <tr class="successful">
+               <th><a href="#top_scenario2">Test error checking</a></th>
+               <th class="totals">4</th>
+               <th class="totals">0</th>
+               <th class="totals">0</th>
+               <th class="totals">4</th>
             </tr>
             <tr class="pending">
                <th>(<strong>true</strong>) <a>Split page sequences no split to be done</a></th>
@@ -669,6 +676,53 @@ span.scenario-totals {
                </tr>
                <tr class="successful">
                   <td>Expected map with start false, end true</td>
+                  <td>Success</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+      <div id="top_scenario2">
+         <h2 class="successful">Test error checking<span class="scenario-totals">passed: 4 / pending: 0 / failed: 0 / total: 4</span></h2>
+         <table class="xspec" id="table_scenario2">
+            <colgroup>
+               <col style="width:75%" />
+               <col style="width:25%" />
+            </colgroup>
+            <tbody>
+               <tr class="successful">
+                  <th>Test error checking</th>
+                  <th>passed: 4 / pending: 0 / failed: 0 / total: 4</th>
+               </tr>
+               <tr class="successful">
+                  <th>Good input with markers</th>
+                  <th>passed: 1 / pending: 0 / failed: 0 / total: 1</th>
+               </tr>
+               <tr class="successful">
+                  <td>Expected true value</td>
+                  <td>Success</td>
+               </tr>
+               <tr class="successful">
+                  <th>Good input without markers</th>
+                  <th>passed: 1 / pending: 0 / failed: 0 / total: 1</th>
+               </tr>
+               <tr class="successful">
+                  <td>Expected true value</td>
+                  <td>Success</td>
+               </tr>
+               <tr class="successful">
+                  <th>Not paired</th>
+                  <th>passed: 1 / pending: 0 / failed: 0 / total: 1</th>
+               </tr>
+               <tr class="successful">
+                  <td>Expected false value</td>
+                  <td>Success</td>
+               </tr>
+               <tr class="successful">
+                  <th>Mismatched</th>
+                  <th>passed: 1 / pending: 0 / failed: 0 / total: 1</th>
+               </tr>
+               <tr class="successful">
+                  <td>Expected two unmatched items</td>
                   <td>Success</td>
                </tr>
             </tbody>

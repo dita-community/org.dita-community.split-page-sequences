@@ -21,6 +21,58 @@
   <xsl:mode name="sps:split-page-sequences"
     on-no-match="shallow-copy"
   />
+  <xsl:mode name="sps:filter-out-page-sequence-markers"
+    on-no-match="shallow-copy"
+  />
+  
+  <xsl:template match="fo:root" mode="sps:split-page-sequences">
+    <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
+
+    <!-- Verifiy that all start/end pairs match and bail on splitting if they do not -->
+    
+    <xsl:variable name="page-sequence-markers" as="element()*" select=".//sps:page-sequence-start | .//sps:page-sequence-end"/>
+    
+    <xsl:choose>
+      <xsl:when test="exists($page-sequence-markers)">
+        <xsl:variable name="isPaired" as="xs:boolean"
+          select="sps:isMarkersPaired(.)"
+        />
+        <xsl:variable name="unmatched" as="map(*)*"
+          select="sps:findUnmatchedMarkers(.)
+          "
+        />
+        <xsl:if test="not($isPaired)">
+          <xsl:message expand-text="true">- [WARN] Split page sequences: Did not find an equal number of page sequence start/end markers.</xsl:message>
+        </xsl:if>
+        <xsl:if test="exists($unmatched)">
+          <xsl:message expand-text="true">- [WARN] Split page sequences: Have {count($unmatched)} unmatched start/end page sequence markers:</xsl:message>
+          <xsl:for-each select="$unmatched">
+            <xsl:message expand-text="true">- [WARN] Split page sequences:   <xsl:sequence select=".('end')"/>. Preceding marker is <xsl:sequence select=".('preceding')"/></xsl:message>              
+          </xsl:for-each>
+        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="not($isPaired) or exists($unmatched)">
+            <xsl:message expand-text="true">- [WARN] Split page sequences: Cannot perform splitting.</xsl:message>
+            <xsl:apply-templates select="." mode="sps:filter-out-page-sequence-markers">
+              <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- All good -->
+            <xsl:next-match/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- No markers, just use what we were given as is -->
+        <xsl:sequence select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template mode="sps:filter-out-page-sequence-markers" match="sps:*">
+    <!-- Suppress -->
+  </xsl:template>
 
   <xsl:template mode="sps:split-page-sequences" match="*" priority="-1">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
@@ -302,6 +354,44 @@
       </xsl:if>
     </xsl:variable>
     
+    <xsl:sequence select="$result"/>
+  </xsl:function>
+  
+  <!--
+    Determines if the markers in the FO document are properly paired.
+    
+    @param context fo:root element
+    @return True if there are even numbers of start/end markers.
+    -->
+  <xsl:function name="sps:isMarkersPaired" as="xs:boolean">
+    <xsl:param name="context" as="element(fo:root)"/>
+    
+    <xsl:variable name="result" as="xs:boolean"
+      select="count($context//sps:page-sequence-start) eq count($context//sps:page-sequence-end)"
+    />
+    <xsl:sequence select="$result"/>
+  </xsl:function>
+  
+  <!--
+    Finds any unmatched markers
+    @param context fo:root element
+    @return List, possibly empty, of sps:page-sequence-end elements that are not matched with a page-sequence-start element.
+    -->
+  <xsl:function name="sps:findUnmatchedMarkers" as="map(*)*">
+    <xsl:param name="context" as="element(fo:root)"/>
+    <xsl:variable name="page-sequence-markers" as="element()*" 
+      select="$context//sps:page-sequence-start | $context//sps:page-sequence-end"
+    />
+    <xsl:variable name="result"
+      select="
+    for $end in $page-sequence-markers/self::sps:page-sequence-end
+    return
+    let $preceding := $end/(preceding::sps:page-sequence-start|preceding::sps:page-sequence-end)[last()]
+    return 
+    if (exists($preceding/self::sps:page-sequence-start) and ($preceding/@page-sequence-master eq $end/@page-sequence-master))
+    then ()
+    else map{'end' : $end, 'preceding' : $preceding}
+    "/>
     <xsl:sequence select="$result"/>
   </xsl:function>
 </xsl:stylesheet>
