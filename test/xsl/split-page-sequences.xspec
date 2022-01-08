@@ -5,6 +5,29 @@
   stylesheet="./test-split-page-sequences.xsl"  
   > 
 
+  <x:scenario label="Split page sequences split on topics within a chapter" focus="Testing splitting">
+    <x:context as="element()" 
+      href="../resources/xsl-fo/input/base-fo-good-markers.fo"
+      select="/*"
+      mode="sps:split-page-sequences"
+    />  
+    <x:expect href="../resources/xsl-fo/expected/result-fo-splitting_expected.fo" 
+      label="Result pages sequences are as they should be."
+      select="/*"
+    />      
+  </x:scenario>
+  
+  <x:scenario label="Split page sequences no split to be done">
+    <x:context as="element()" 
+      href="../resources/xsl-fo/input/base-fo-no-markers.fo"
+      select="/*"
+      mode="sps:split-page-sequences"
+    />  
+    <x:expect href="../resources/xsl-fo/expected/result-fo-no-splitting_expected.fo" 
+      label="Result should match input"
+      select="/*"
+    />      
+  </x:scenario>
   <x:scenario label="Test sps:getPageSequenceData">
     <x:scenario label="Test Page Sequence No start/end">
       <x:call function="sps:getPageSequenceData">
@@ -62,9 +85,4 @@
     </x:scenario>
   </x:scenario>
   
-  <x:scenario label="Split page sequences no split to be done" pending="true">
-    
-  </x:scenario>
-  <x:scenario label="Split page sequences split on topics within a chapter" pending="true">
-  </x:scenario>
 </x:description>
