@@ -622,9 +622,11 @@
                 ><fo:marker marker-class-name="current-header">Getting
                 Started</fo:marker><fo:wrapper id="d192e116"/><fo:wrapper
                 id="_OPENTOPIC_TOC_PROCESSING_d275e773"/>Getting
-            Started</fo:block></fo:block><sps:page-sequence-start
+            Started</fo:block></fo:block>
+<!-- page sequence start, subsequence-01 -->              
+<sps:page-sequence-start
             xmlns:sps="urn:ns:dita-community:split-page-sequences"
-            page-sequence-master="index-sequence"/><fo:block><fo:block><fo:block
+            page-sequence-master="subsequence-01"/><fo:block><fo:block><fo:block
                 font-family="sans-serif" border-after-style="solid" border-after-width="1pt"
                 border-after-color="black" space-before="12pt" space-after="5pt" font-size="14pt"
                 font-weight="bold" padding-top="12pt" keep-with-next.within-column="always"
@@ -1058,11 +1060,16 @@
                     </fo:list-item-body>
                   </fo:list-item>
                 </fo:list-block>
-              </fo:block></fo:block></fo:block><sps:page-sequence-end
+              </fo:block></fo:block></fo:block>
+<!-- End of page sequence subsequence-01 -->              
+<sps:page-sequence-end
             xmlns:sps="urn:ns:dita-community:split-page-sequences"
-            page-sequence-master="index-sequence"/><sps:page-sequence-start
+            page-sequence-master="subsequence-01"/>
+<!-- Start of page sequence subsequence-02 -->              
+<sps:page-sequence-start
             xmlns:sps="urn:ns:dita-community:split-page-sequences"
-            page-sequence-master="glossary-sequence"/><fo:block><fo:block><fo:block
+            page-sequence-master="subsequence-02"/>
+<fo:block><fo:block><fo:block
                 font-family="sans-serif" border-after-style="solid" border-after-width="1pt"
                 border-after-color="black" space-before="12pt" space-after="5pt" font-size="14pt"
                 font-weight="bold" padding-top="12pt" keep-with-next.within-column="always"
@@ -1468,9 +1475,12 @@
                     </fo:table>
                   </fo:block>
                 </fo:block-container>
-              </fo:block></fo:block></fo:block><sps:page-sequence-end
+              </fo:block></fo:block></fo:block>
+<!-- End of page sequence subsequence-02 -->              
+<sps:page-sequence-end
             xmlns:sps="urn:ns:dita-community:split-page-sequences"
-            page-sequence-master="glossary-sequence"/><fo:block><fo:block><fo:block
+            page-sequence-master="subsequence-02"/>
+<fo:block><fo:block><fo:block
                 font-family="sans-serif" border-after-style="solid" border-after-width="1pt"
                 border-after-color="black" space-before="12pt" space-after="5pt" font-size="14pt"
                 font-weight="bold" padding-top="12pt" keep-with-next.within-column="always"

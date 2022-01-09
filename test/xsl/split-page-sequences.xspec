@@ -12,7 +12,9 @@
       href="../resources/xsl-fo/input/base-fo-good-markers.fo"
       select="/*"
       mode="sps:split-page-sequences"
-    />  
+    >
+      <x:param name="doDebug" as="xs:boolean" select="true()" tunnel="yes"/>
+    </x:context>
     <x:expect
       label="Expecting 8 page sequences"
       test="count(//fo:page-sequence) eq 8"

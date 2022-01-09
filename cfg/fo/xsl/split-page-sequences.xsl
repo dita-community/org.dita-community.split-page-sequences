@@ -8,6 +8,7 @@
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   xmlns:sps="urn:ns:dita-community:split-page-sequences"
   exclude-result-prefixes="xs xd opentopic local dita-ot sps" 
+  expand-text="yes"
   version="3.0">
   <!-- ==============================================================
        Mode to split a single page sequence into multiple page
@@ -28,6 +29,10 @@
   <xsl:template match="fo:root" mode="sps:split-page-sequences">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
 
+    <xsl:if test="$doDebug">
+      <xsl:message expand-text="yes">+ [DEBUG] sps:split-page-sequences: Handling {name(.)}</xsl:message>
+    </xsl:if>
+
     <!-- Verifiy that all start/end pairs match and bail on splitting if they do not -->
     
     <xsl:variable name="page-sequence-markers" as="element()*" select=".//sps:page-sequence-start | .//sps:page-sequence-end"/>
@@ -42,17 +47,17 @@
           "
         />
         <xsl:if test="not($isPaired)">
-          <xsl:message expand-text="true">- [WARN] Split page sequences: Did not find an equal number of page sequence start/end markers.</xsl:message>
+          <xsl:message>- [WARN] Split page sequences: Did not find an equal number of page sequence start/end markers.</xsl:message>
         </xsl:if>
         <xsl:if test="exists($unmatched)">
-          <xsl:message expand-text="true">- [WARN] Split page sequences: Have {count($unmatched)} unmatched start/end page sequence markers:</xsl:message>
+          <xsl:message>- [WARN] Split page sequences: Have {count($unmatched)} unmatched start/end page sequence markers:</xsl:message>
           <xsl:for-each select="$unmatched">
-            <xsl:message expand-text="true">- [WARN] Split page sequences:   <xsl:sequence select=".('end')"/>. Preceding marker is <xsl:sequence select=".('preceding')"/></xsl:message>              
+            <xsl:message>- [WARN] Split page sequences:   <xsl:sequence select=".('end')"/>. Preceding marker is <xsl:sequence select=".('preceding')"/></xsl:message>              
           </xsl:for-each>
         </xsl:if>
         <xsl:choose>
           <xsl:when test="not($isPaired) or exists($unmatched)">
-            <xsl:message expand-text="true">- [WARN] Split page sequences: Cannot perform splitting.</xsl:message>
+            <xsl:message>- [WARN] Split page sequences: Cannot perform splitting.</xsl:message>
             <xsl:apply-templates select="." mode="sps:filter-out-page-sequence-markers">
               <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
             </xsl:apply-templates>
@@ -109,9 +114,9 @@
           descendant::fo:table |
           descendant::sps:page-sequence-start |
           descendant::sps:page-sequence-end"
-          group-starting-with="sps:page-sequence-start">
+          group-starting-with="sps:page-sequence-start | sps:page-sequence-end">
           <xsl:if test="$doDebug">
-            <xsl:message>+ [DEBUG] split-page-sequences: group [<xsl:value-of select="position()"/>] Context element is <xsl:value-of select="name(.)"/>]</xsl:message>
+            <xsl:message>+ [DEBUG] split-page-sequences: group [{position()}] Context element is {name(.)}]</xsl:message>
           </xsl:if>
           <xsl:variable name="group-number" as="xs:integer" select="position()"/>
           <xsl:variable name="page-sequence-master" as="xs:string"
@@ -120,7 +125,7 @@
             then string(@page-sequence-master)
             else $original-page-sequence/@master-reference"/>
           <xsl:if test="$doDebug">
-            <xsl:message>+ [DEBUG] split-page-sequences:   page-sequence-master="<xsl:value-of select="$page-sequence-master"/>"</xsl:message>
+            <xsl:message>+ [DEBUG] split-page-sequences:   page-sequence-master="{$page-sequence-master}"</xsl:message>
           </xsl:if>
           
           <xsl:apply-templates select="$original-page-sequence/fo:flow" mode="sps:split-flow">
@@ -146,6 +151,15 @@
       </xsl:apply-templates>      
     </xsl:variable>
     
+    <xsl:if test="$doDebug">
+      <xsl:message>+ [DEBUG] split-page-sequences: flows-filtered:
+<xsl:sequence select="
+  for $node in $flows-filtered
+  return '&#x0a; + ' || name($node) || ', page-sequence-master=' || $node/*[1]/@page-sequence-master 
+  "/>        
+      </xsl:message>      
+    </xsl:if>
+    
     <!-- Now reconsitute the page sequences. -->
     
     <!-- First page sequence will always reflect the original -->
@@ -155,12 +169,18 @@
       <xsl:sequence select="$flows-filtered[1]"></xsl:sequence>
     </xsl:element>
     
-    <xsl:for-each select="$flows-filtered[position() gt 1]">
+    <xsl:for-each select="$flows-filtered[position() != 1]">
       <xsl:variable name="page-sequence-master" as="xs:string?"
         select="./fo:block[1]/@page-sequence-master"
       />
+      <xsl:if test="$doDebug">
+        <xsl:message>+ [DEBUG] split-page-sequences: [{position()}] page-sequence-master="{$page-sequence-master}"</xsl:message>      
+      </xsl:if>
       <xsl:choose>
         <xsl:when test="exists($page-sequence-master)">
+          <xsl:if test="$doDebug">
+            <xsl:message>+ [DEBUG] split-page-sequences:   Generating new page sequence with master name "{$page-sequence-master}"</xsl:message>      
+          </xsl:if>
           <fo:page-sequence master-reference="{$page-sequence-master}">
             <xsl:apply-templates mode="sps:construct-static-content-for-page-sequence"
               select="$original-page-sequence">
@@ -172,6 +192,9 @@
           </fo:page-sequence>
         </xsl:when>
         <xsl:otherwise>
+          <xsl:if test="$doDebug">
+            <xsl:message>+ [DEBUG] split-page-sequences:   No page sequence master name, using original page sequence name.</xsl:message>      
+          </xsl:if>
           <xsl:element name="{name($original-page-sequence)}">
             <xsl:sequence select="$original-page-sequence/@* except ($original-page-sequence/@initial-page-number)"/>
             <xsl:sequence select="$static-content"/>
@@ -220,8 +243,8 @@
     <xsl:param name="page-sequence-master" as="xs:string" tunnel="yes"/>
     
     <xsl:if test="$doDebug">
-      <xsl:message>+ [DEBUG] split: root fo:block. page-sequence-master="<xsl:value-of select="$page-sequence-master"/>"</xsl:message>
-      <xsl:message>+ [DEBUG] split:   page-sequence-start="<xsl:value-of select="$page-sequence-start"/>"</xsl:message>
+      <xsl:message>+ [DEBUG] split-flow: root fo:block. page-sequence-master="<xsl:value-of select="$page-sequence-master"/>"</xsl:message>
+      <xsl:message>+ [DEBUG] split-flow:   page-sequence-start="<xsl:value-of select="$page-sequence-start"/>"</xsl:message>
     </xsl:if>
     
     <xsl:copy>
@@ -237,6 +260,9 @@
     match="sps:page-sequence-start | 
            sps:page-sequence-end">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
+    <xsl:if test="$doDebug">
+      <xsl:message>+ [DEBUG] split-flow: Ignoring {name(.)}</xsl:message>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template mode="sps:filter-bad-attributes" match="*[.//fo:block[@page-sequence-master]]">
@@ -253,6 +279,10 @@
 
   <xsl:template mode="sps:filter-bad-attributes" match="fo:block[@page-sequence-master]">
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
+
+    <xsl:if test="$doDebug">
+      <xsl:message>+ [DEBUG] split-flow: {name(.)}/@page-sequence-master="{@page-sequence-master}"</xsl:message>
+    </xsl:if>
     
     <xsl:copy>
       <xsl:sequence select="@* except (@page-sequence-master)"/>
