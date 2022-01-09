@@ -1,0 +1,8 @@
+*.xpr
+out/
+temp/
+.*
+~*
+*.pdf
+*.zip
+test/xsl/xspec/

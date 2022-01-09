@@ -2,6 +2,8 @@
 <x:description 
   xmlns:x="http://www.jenitennison.com/xslt/xspec"
   xmlns:sps="urn:ns:dita-community:split-page-sequences"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
   stylesheet="./test-split-page-sequences.xsl"  
   > 
 
@@ -11,11 +13,15 @@
       select="/*"
       mode="sps:split-page-sequences"
     />  
-    <x:expect href="../resources/xsl-fo/expected/result-fo-splitting_expected.fo" 
+    <x:expect
+      label="Expecting 8 page sequences"
+      test="count(//fo:page-sequence) eq 8"
+    />
+<!--    <x:expect href="../resources/xsl-fo/expected/result-fo-splitting_expected.fo" pending="Not here yet"
       label="Result pages sequences are as they should be."
       select="/*"
     />      
-  </x:scenario>
+-->  </x:scenario>
   
   <x:scenario label="Split page sequences no split to be done">
     <x:context as="element()" 
