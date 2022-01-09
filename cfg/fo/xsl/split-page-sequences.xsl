@@ -127,19 +127,32 @@
           <xsl:if test="$doDebug">
             <xsl:message>+ [DEBUG] split-page-sequences:   page-sequence-master="{$page-sequence-master}"</xsl:message>
           </xsl:if>
+          <xsl:if test="$doDebug">
+            <xsl:message>+ [DEBUG] split-page-sequences:   Group count: {count(current-group())}</xsl:message>
+          </xsl:if>
           
-          <xsl:apply-templates select="$original-page-sequence/fo:flow" mode="sps:split-flow">
-            <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
-            <xsl:with-param name="restricted-to" as="node()*"
-              select="current-group()/ancestor-or-self::node()"
-              tunnel="yes"/>
-            <xsl:with-param name="page-sequence-start" as="xs:boolean"
-              tunnel="yes"
-              select="exists(self::sps:page-sequence-start)"
-            />        
-            <xsl:with-param name="page-sequence-master" as="xs:string" tunnel="yes" select="$page-sequence-master"/>
-            <xsl:with-param name="group-number" as="xs:integer" tunnel="yes" select="$group-number"/>
-          </xsl:apply-templates>
+          <xsl:choose>
+            <xsl:when test="count(current-group()) eq 1 and self::sps:page-sequence-end">
+              <xsl:if test="$doDebug">
+                <xsl:message>+ [DEBUG] split-page-sequences:   Ignoring group that is only a page sequence end.</xsl:message>
+              </xsl:if>
+              <!-- Ignore this -->              
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="$original-page-sequence/fo:flow" mode="sps:split-flow">
+                <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
+                <xsl:with-param name="restricted-to" as="node()*"
+                  select="current-group()/ancestor-or-self::node()"
+                  tunnel="yes"/>
+                <xsl:with-param name="page-sequence-start" as="xs:boolean"
+                  tunnel="yes"
+                  select="exists(self::sps:page-sequence-start)"
+                />        
+                <xsl:with-param name="page-sequence-master" as="xs:string" tunnel="yes" select="$page-sequence-master"/>
+                <xsl:with-param name="group-number" as="xs:integer" tunnel="yes" select="$group-number"/>
+              </xsl:apply-templates>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:for-each-group>      
       </xsl:document>
     </xsl:variable>

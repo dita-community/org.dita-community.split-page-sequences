@@ -13,17 +13,25 @@
       select="/*"
       mode="sps:split-page-sequences"
     >
-      <x:param name="doDebug" as="xs:boolean" select="true()" tunnel="yes"/>
+      <x:param name="doDebug" as="xs:boolean" select="false()" tunnel="yes"/>
     </x:context>
     <x:expect
-      label="Expecting 8 page sequences"
-      test="count(//fo:page-sequence) eq 8"
+      label="Expecting 7 page sequences"
+      test="count(/*/fo:page-sequence) eq 7"
     />
-<!--    <x:expect href="../resources/xsl-fo/expected/result-fo-splitting_expected.fo" pending="Not here yet"
-      label="Result pages sequences are as they should be."
-      select="/*"
-    />      
--->  </x:scenario>
+    <x:expect
+      label="First split page sequence should be dita-body-sequence"
+      test="/*/fo:page-sequence[3]/@master-reference eq 'ditamap-body-sequence'"/>
+    <x:expect
+      label="Second split page sequence should be subsequence-01"
+      test="/*/fo:page-sequence[4]/@master-reference eq 'subsequence-01'"/>
+    <x:expect
+      label="Thirds split page sequence should be subsequence-02"
+      test="/*/fo:page-sequence[5]/@master-reference eq 'subsequence-02'"/>
+    <x:expect
+      label="Fourth split page sequence should be dita-body-sequence"
+      test="/*/fo:page-sequence[6]/@master-reference eq 'ditamap-body-sequence'"/>
+  </x:scenario>
   
   <x:scenario label="Split page sequences no split to be done">
     <x:context as="element()" 
