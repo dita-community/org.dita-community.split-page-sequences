@@ -8,6 +8,8 @@ This plug-in provides a post-process to the initially-generated XSL-FO document 
 
 This allows you to do things like render specific tables or images on landscape pages or use different page layouts for content within specific topics or trees within the maps.
 
+*NOTE:* This plug-in does not provide a way to set the top-level page sequence names. That is done using normal PDF2 override techniques set the page sequence master for a given chapter or part (or equivalent top-level topic). This plugin is specifically for triggering new page masters *within* the PDF2-generated top-level page sequences. This means that specifying the `page-sequence_*` @outputclass values on topicrefs that already generate new page sequences will have no effect.
+
 ## Generating page sequence start/end markers
 
 The plug-in provides a general extension point that you can extend in your own extension XSLT to generate page sequence markers for whatever reason.
