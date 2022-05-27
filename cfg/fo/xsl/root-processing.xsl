@@ -29,9 +29,15 @@
     <xsl:if test="$doDebug">
       <xsl:message>+ [DEBUG] SPS: Applying templates to base FO in mode sps:split-page-sequences...</xsl:message>
     </xsl:if>
-    <xsl:result-document href="base-fo.fo">
-      <xsl:sequence select="$base-fo"/>
-    </xsl:result-document>
+<!--  Uncomment this if you need to inspect the initial state of the FO.
+      
+      NOTE: This result-document instruction will fail is some other extension to the PDF2 transform puts
+            the result of the "/" template into a variable.
+      
+      <xsl:result-document href="base-fo.fo">
+        <xsl:sequence select="$base-fo"/>
+      </xsl:result-document>
+--> 
     <xsl:apply-templates select="$base-fo" mode="sps:split-page-sequences">
       <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
     </xsl:apply-templates>
