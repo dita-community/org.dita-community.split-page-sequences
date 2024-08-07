@@ -237,7 +237,7 @@
     <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>    
     <xsl:param name="restricted-to" as="node()+" tunnel="yes"/>
     
-    <xsl:if test="exists(. intersect $restricted-to)">
+    <xsl:if test="exists(. intersect $restricted-to) or ((self::text() or self::fo:inline) and exists(ancestor::fo:block[1] intersect $restricted-to))">
       <xsl:next-match/>
     </xsl:if>
   </xsl:template>
